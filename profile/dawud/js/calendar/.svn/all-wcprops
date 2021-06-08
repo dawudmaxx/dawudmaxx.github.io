@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 38
+/svn/test/!svn/ver/8/bleep/js/calendar
+END
+demo.js
+K 25
+svn:wc:ra_dav:version-url
+V 46
+/svn/test/!svn/ver/8/bleep/js/calendar/demo.js
+END
+bootstrap_calendar.js
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svn/test/!svn/ver/8/bleep/js/calendar/bootstrap_calendar.js
+END
+bootstrap_calendar.css
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svn/test/!svn/ver/8/bleep/js/calendar/bootstrap_calendar.css
+END

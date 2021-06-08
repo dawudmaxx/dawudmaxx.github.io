@@ -1,0 +1,29 @@
+K 25
+svn:wc:ra_dav:version-url
+V 42
+/svn/test/!svn/ver/8/bleep/js/fullcalendar
+END
+demo.js
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/svn/test/!svn/ver/8/bleep/js/fullcalendar/demo.js
+END
+fullcalendar.css
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/svn/test/!svn/ver/8/bleep/js/fullcalendar/fullcalendar.css
+END
+fullcalendar.min.js
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svn/test/!svn/ver/8/bleep/js/fullcalendar/fullcalendar.min.js
+END
+theme.css
+K 25
+svn:wc:ra_dav:version-url
+V 52
+/svn/test/!svn/ver/8/bleep/js/fullcalendar/theme.css
+END
