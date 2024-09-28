@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>4x7 Image Collage Generator (10x15 inches) with White Background and Black Stroke</title>
+    <title>4x7 Image Collage Generator with Cropping</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropper/4.1.0/cropper.min.css">
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -13,15 +14,16 @@
             padding: 20px;
             background-color: #f0f0f0;
         }
-        canvas {
+        canvas, #cropperContainer, #croppedImageContainer {
             border: 1px solid #ddd;
             max-width: 100%;
             box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
         }
-        input, button, #downloadLink {
+        input, button, #downloadLink, select {
             margin: 10px 0;
         }
-        button, #downloadLink {
+        button, #downloadLink, select {
             padding: 10px 20px;
             font-size: 16px;
             background-color: #4CAF50;
@@ -32,7 +34,7 @@
             text-decoration: none;
             display: inline-block;
         }
-        button:hover, #downloadLink:hover {
+        button:hover, #downloadLink:hover, select:hover {
             background-color: #45a049;
         }
         #downloadLink {
@@ -46,84 +48,184 @@
             color: #666666;
             cursor: not-allowed;
         }
+        #cropperContainer, #croppedImageContainer {
+            max-width: 500px;
+            max-height: 500px;
+        }
+        #croppedImage {
+            max-width: 100%;
+            max-height: 100%;
+        }
+        .flex-container {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            max-width: 1000px;
+        }
+        .flex-item {
+            width: 48%;
+        }
     </style>
 </head>
 <body>
-    <h1>4x7 Image Collage Generator</h1>
+    <h1>4x7 Image Collage Generator with Cropping</h1>
     <p>10x15 inches with White Background and Black Stroke</p>
     <input type="file" id="imageInput" accept="image/*">
-    <button id="generateButton">Generate Collage</button>
-    <a id="downloadLink" class="disabled" href="javascript:void(0);">Download Collage (Generate First)</a>
+    <div class="flex-container">
+        <div class="flex-item">
+            <div id="cropperContainer" style="display: none;">
+                <img id="imageToCrop" src="" alt="Image to crop">
+            </div>
+        </div>
+        <div class="flex-item">
+            <div id="croppedImageContainer" style="display: none;">
+                <img id="croppedImage" src="" alt="Cropped image">
+            </div>
+        </div>
+    </div>
+    <select id="aspectRatio">
+        <option value="1">1:1</option>
+        <option value="0.7777777777777778">3.5:4.5</option>
+    </select>
+    <button id="cropButton" style="display: none;">Crop Image</button>
+    <button id="generateButton" style="display: none;">Generate Collage</button>
+    <a id="downloadLink" class="disabled" href="javascript:void(0);" download="collage.png">Download Collage (Generate First)</a>
     <canvas id="canvas"></canvas>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
     <script>
         const canvas = document.getElementById('canvas');
         const ctx = canvas.getContext('2d');
         const imageInput = document.getElementById('imageInput');
+        const cropperContainer = document.getElementById('cropperContainer');
+        const croppedImageContainer = document.getElementById('croppedImageContainer');
+        const imageToCrop = document.getElementById('imageToCrop');
+        const aspectRatioSelect = document.getElementById('aspectRatio');
+        const cropButton = document.getElementById('cropButton');
         const generateButton = document.getElementById('generateButton');
         const downloadLink = document.getElementById('downloadLink');
+        const croppedImage = document.getElementById('croppedImage');
+
+        let cropper;
 
         // Set canvas size (10x15 inches at 300 DPI)
         const dpi = 300;
         canvas.width = 10 * dpi;  // 10 inches wide
         canvas.height = 15 * dpi; // 15 inches tall
 
-        generateButton.addEventListener('click', () => {
-            if (imageInput.files && imageInput.files[0]) {
-                const img = new Image();
-                img.onload = function() {
-                    // Set white background
-                    ctx.fillStyle = 'white';
-                    ctx.fillRect(0, 0, canvas.width, canvas.height);
+        imageInput.addEventListener('change', function(e) {
+            if (e.target.files && e.target.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    imageToCrop.src = event.target.result;
+                    cropperContainer.style.display = 'block';
+                    cropButton.style.display = 'inline-block';
+                    generateButton.style.display = 'none';
+                    croppedImageContainer.style.display = 'none';
 
-                    // Calculate the spacing between images
-                    const imageSize = 2 * dpi; // 2 inches at 300 DPI
-                    const horizontalSpacing = (canvas.width - 4 * imageSize) / 5; // 5 spaces for 4 images
-                    const verticalSpacing = (canvas.height - 7 * imageSize) / 8; // 8 spaces for 7 images
-
-                    for (let row = 0; row < 7; row++) {
-                        for (let col = 0; col < 4; col++) {
-                            const x = horizontalSpacing + col * (imageSize + horizontalSpacing);
-                            const y = verticalSpacing + row * (imageSize + verticalSpacing);
-                            
-                            // Draw the image
-                            ctx.drawImage(
-                                img,
-                                x,
-                                y,
-                                imageSize,
-                                imageSize
-                            );
-
-                            // Add 1px black stroke
-                            ctx.strokeStyle = 'black';
-                            ctx.lineWidth = 1;
-                            ctx.strokeRect(x, y, imageSize, imageSize);
-                        }
+                    if (cropper) {
+                        cropper.destroy();
                     }
 
-                    // Update download link
-                    updateDownloadLink();
-                };
-                img.src = URL.createObjectURL(imageInput.files[0]);
-            } else {
-                alert('Please select an image first.');
+                    cropper = new Cropper(imageToCrop, {
+                        aspectRatio: 1,
+                        viewMode: 1,
+                        responsive: true,
+                    });
+                }
+                reader.readAsDataURL(e.target.files[0]);
             }
+        });
+
+        aspectRatioSelect.addEventListener('change', function() {
+            if (cropper) {
+                cropper.setAspectRatio(parseFloat(this.value));
+            }
+        });
+
+        cropButton.addEventListener('click', function() {
+            if (cropper) {
+                const croppedCanvas = cropper.getCroppedCanvas();
+                croppedImage.src = croppedCanvas.toDataURL('image/png');
+                cropperContainer.style.display = 'none';
+                croppedImageContainer.style.display = 'block';
+                cropButton.style.display = 'none';
+                generateButton.style.display = 'inline-block';
+                console.log("Image cropped and displayed");
+            }
+        });
+
+        generateButton.addEventListener('click', () => {
+            // Set white background
+            ctx.fillStyle = 'white';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // Calculate the spacing between images
+            const imageSize = 2 * dpi; // 2 inches at 300 DPI
+            const horizontalSpacing = (canvas.width - 4 * imageSize) / 5; // 5 spaces for 4 images
+            const verticalSpacing = (canvas.height - 7 * imageSize) / 8; // 8 spaces for 7 images
+
+            for (let row = 0; row < 7; row++) {
+                for (let col = 0; col < 4; col++) {
+                    const x = horizontalSpacing + col * (imageSize + horizontalSpacing);
+                    const y = verticalSpacing + row * (imageSize + verticalSpacing);
+                    
+                    // Draw the image
+                    ctx.drawImage(
+                        croppedImage,
+                        x,
+                        y,
+                        imageSize,
+                        imageSize
+                    );
+
+                    // Add 1px black stroke
+                    ctx.strokeStyle = 'black';
+                    ctx.lineWidth = 1;
+                    ctx.strokeRect(x, y, imageSize, imageSize);
+                }
+            }
+
+            // Update download link
+            updateDownloadLink();
         });
 
         function updateDownloadLink() {
             try {
-                const dataURL = canvas.toDataURL('image/png');
-                downloadLink.href = dataURL;
-                downloadLink.download = 'collage.png';
-                downloadLink.textContent = 'Download Collage';
-                downloadLink.classList.remove('disabled');
-                console.log("Download link updated and enabled");
+                canvas.toBlob(function(blob) {
+                    if (blob) {
+                        const url = URL.createObjectURL(blob);
+                        downloadLink.href = url;
+                        downloadLink.download = 'collage.png';
+                        downloadLink.textContent = 'Download Collage';
+                        downloadLink.classList.remove('disabled');
+                        console.log("Download link updated and enabled");
+                    } else {
+                        throw new Error("Failed to create blob from canvas");
+                    }
+                }, 'image/png');
             } catch (error) {
                 console.error("Error updating download link:", error);
                 alert("An error occurred while preparing the download. Please try again.");
             }
         }
+
+        // Add event listener for download link
+        downloadLink.addEventListener('click', function(e) {
+            if (this.classList.contains('disabled')) {
+                e.preventDefault();
+                alert("Please generate the collage first.");
+            } else {
+                console.log("Download initiated");
+                // Force download for browsers that don't support the download attribute
+                const link = document.createElement('a');
+                link.href = this.href;
+                link.download = this.download;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            }
+        });
     </script>
 </body>
 </html>
