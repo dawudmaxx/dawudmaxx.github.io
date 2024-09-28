@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Image Collage Generator with 3.5x4.5 inch images</title>
+    <title>Flexible Image Collage Generator with Cropping</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropper/4.1.0/cropper.min.css">
     <style>
         body {
@@ -68,7 +68,7 @@
     </style>
 </head>
 <body>
-    <h1>Image Collage Generator</h1>
+    <h1>Flexible Image Collage Generator with Cropping</h1>
     <p>10x15 inches with White Background and Black Stroke</p>
     <input type="file" id="imageInput" accept="image/*">
     <div class="flex-container">
@@ -162,9 +162,14 @@
             ctx.fillStyle = 'white';
             ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-            // Set image size to 3.5x4.5 inches
-            const imageWidth = 3.5 * dpi;
-            const imageHeight = 4.5 * dpi;
+            // Calculate the image size based on the aspect ratio
+            let imageWidth, imageHeight;
+            if (currentAspectRatio === 1) {
+                imageWidth = imageHeight = 2 * dpi; // 2 inches for 1:1 ratio
+            } else {
+                imageWidth = 3.5 * dpi; // 3.5 inches wide for 3.5:4.5 ratio
+                imageHeight = 4.5 * dpi; // 4.5 inches tall for 3.5:4.5 ratio
+            }
 
             // Calculate how many images can fit horizontally and vertically
             const horizontalCount = Math.floor(canvas.width / imageWidth);
