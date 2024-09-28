@@ -18,10 +18,10 @@
             max-width: 100%;
             box-shadow: 0 0 10px rgba(0,0,0,0.1);
         }
-        input, button {
+        input, button, #downloadLink {
             margin: 10px 0;
         }
-        button {
+        button, #downloadLink {
             padding: 10px 20px;
             font-size: 16px;
             background-color: #4CAF50;
@@ -29,15 +29,22 @@
             border: none;
             border-radius: 5px;
             cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
         }
-        button:hover {
+        button:hover, #downloadLink:hover {
             background-color: #45a049;
         }
-        #downloadButton {
+        #downloadLink {
             background-color: #008CBA;
         }
-        #downloadButton:hover {
+        #downloadLink:hover {
             background-color: #007B9A;
+        }
+        #downloadLink.disabled {
+            background-color: #cccccc;
+            color: #666666;
+            cursor: not-allowed;
         }
     </style>
 </head>
@@ -46,7 +53,7 @@
     <p>10x15 inches with White Background and Black Stroke</p>
     <input type="file" id="imageInput" accept="image/*">
     <button id="generateButton">Generate Collage</button>
-    <button id="downloadButton" disabled>Download Collage</button>
+    <a id="downloadLink" class="disabled" href="javascript:void(0);">Download Collage (Generate First)</a>
     <canvas id="canvas"></canvas>
 
     <script>
@@ -54,7 +61,7 @@
         const ctx = canvas.getContext('2d');
         const imageInput = document.getElementById('imageInput');
         const generateButton = document.getElementById('generateButton');
-        const downloadButton = document.getElementById('downloadButton');
+        const downloadLink = document.getElementById('downloadLink');
 
         // Set canvas size (10x15 inches at 300 DPI)
         const dpi = 300;
@@ -95,9 +102,8 @@
                         }
                     }
 
-                    // Enable download button
-                    downloadButton.disabled = false;
-                    console.log("Collage generated and download button enabled");
+                    // Update download link
+                    updateDownloadLink();
                 };
                 img.src = URL.createObjectURL(imageInput.files[0]);
             } else {
@@ -105,26 +111,19 @@
             }
         });
 
-        // Add download functionality
-        downloadButton.addEventListener('click', () => {
-            console.log("Download button clicked");
+        function updateDownloadLink() {
             try {
                 const dataURL = canvas.toDataURL('image/png');
-                console.log("Data URL generated:", dataURL.substring(0, 100) + "..."); // Log first 100 chars of dataURL
-
-                const link = document.createElement('a');
-                link.download = 'collage.png';
-                link.href = dataURL;
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
-
-                console.log("Download link clicked");
+                downloadLink.href = dataURL;
+                downloadLink.download = 'collage.png';
+                downloadLink.textContent = 'Download Collage';
+                downloadLink.classList.remove('disabled');
+                console.log("Download link updated and enabled");
             } catch (error) {
-                console.error("Error during download:", error);
-                alert("An error occurred while trying to download the image. Please try again.");
+                console.error("Error updating download link:", error);
+                alert("An error occurred while preparing the download. Please try again.");
             }
-        });
+        }
     </script>
 </body>
 </html>
