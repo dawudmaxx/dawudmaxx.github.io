@@ -165,10 +165,10 @@
             // Calculate the image size based on the aspect ratio
             let imageWidth, imageHeight;
             if (currentAspectRatio === 1) {
-                imageWidth = imageHeight = 2 * dpi; // 2 inches for 1:1 ratio
+                imageWidth = imageHeight = 1 * dpi; // 1 inch for 1:1 ratio
             } else {
-                imageWidth = 3.5 * dpi; // 3.5 inches wide for 3.5:4.5 ratio
-                imageHeight = 4.5 * dpi; // 4.5 inches tall for 3.5:4.5 ratio
+                imageWidth = 35 * dpi / 25.4; // 35mm in inches
+                imageHeight = 45 * dpi / 25.4; // 45mm in inches
             }
 
             // Calculate the spacing between images
