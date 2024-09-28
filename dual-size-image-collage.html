@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dual Size Image Collage Generator (10x15 inches)</title>
+    <title>4x7 Image Collage Generator (10x15 inches) with White Background and Black Stroke</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -18,9 +18,8 @@
             max-width: 100%;
             box-shadow: 0 0 10px rgba(0,0,0,0.1);
         }
-        input, select, button {
+        input, button {
             margin: 10px 0;
-            padding: 5px;
         }
         button {
             padding: 10px 20px;
@@ -34,25 +33,28 @@
         button:hover {
             background-color: #45a049;
         }
+        #downloadButton {
+            background-color: #008CBA;
+        }
+        #downloadButton:hover {
+            background-color: #007B9A;
+        }
     </style>
 </head>
 <body>
-    <h1>Dual Size Image Collage Generator</h1>
+    <h1>4x7 Image Collage Generator</h1>
     <p>10x15 inches with White Background and Black Stroke</p>
     <input type="file" id="imageInput" accept="image/*">
-    <select id="sizeSelect">
-        <option value="35x45">35mm x 45mm</option>
-        <option value="2x2">2 inches x 2 inches</option>
-    </select>
     <button id="generateButton">Generate Collage</button>
+    <button id="downloadButton" disabled>Download Collage</button>
     <canvas id="canvas"></canvas>
 
     <script>
         const canvas = document.getElementById('canvas');
         const ctx = canvas.getContext('2d');
         const imageInput = document.getElementById('imageInput');
-        const sizeSelect = document.getElementById('sizeSelect');
         const generateButton = document.getElementById('generateButton');
+        const downloadButton = document.getElementById('downloadButton');
 
         // Set canvas size (10x15 inches at 300 DPI)
         const dpi = 300;
@@ -67,45 +69,35 @@
                     ctx.fillStyle = 'white';
                     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-                    // Get selected size
-                    const selectedSize = sizeSelect.value;
-                    let imageWidth, imageHeight;
+                    // Calculate the spacing between images
+                    const imageSize = 2 * dpi; // 2 inches at 300 DPI
+                    const horizontalSpacing = (canvas.width - 4 * imageSize) / 5; // 5 spaces for 4 images
+                    const verticalSpacing = (canvas.height - 7 * imageSize) / 8; // 8 spaces for 7 images
 
-                    if (selectedSize === '35x45') {
-                        imageWidth = 35 * dpi / 25.4;  // Convert mm to inches, then to pixels
-                        imageHeight = 45 * dpi / 25.4;
-                    } else {
-                        imageWidth = imageHeight = 2 * dpi;
-                    }
-
-                    // Calculate the number of images that fit in the canvas
-                    const imagesPerRow = Math.floor(canvas.width / imageWidth);
-                    const imagesPerColumn = Math.floor(canvas.height / imageHeight);
-
-                    // Calculate spacing
-                    const horizontalSpacing = (canvas.width - imagesPerRow * imageWidth) / (imagesPerRow + 1);
-                    const verticalSpacing = (canvas.height - imagesPerColumn * imageHeight) / (imagesPerColumn + 1);
-
-                    for (let row = 0; row < imagesPerColumn; row++) {
-                        for (let col = 0; col < imagesPerRow; col++) {
-                            const x = horizontalSpacing + col * (imageWidth + horizontalSpacing);
-                            const y = verticalSpacing + row * (imageHeight + verticalSpacing);
+                    for (let row = 0; row < 7; row++) {
+                        for (let col = 0; col < 4; col++) {
+                            const x = horizontalSpacing + col * (imageSize + horizontalSpacing);
+                            const y = verticalSpacing + row * (imageSize + verticalSpacing);
                             
                             // Draw the image
                             ctx.drawImage(
                                 img,
                                 x,
                                 y,
-                                imageWidth,
-                                imageHeight
+                                imageSize,
+                                imageSize
                             );
 
                             // Add 1px black stroke
                             ctx.strokeStyle = 'black';
                             ctx.lineWidth = 1;
-                            ctx.strokeRect(x, y, imageWidth, imageHeight);
+                            ctx.strokeRect(x, y, imageSize, imageSize);
                         }
                     }
+
+                    // Enable download button
+                    downloadButton.disabled = false;
+                    console.log("Collage generated and download button enabled");
                 };
                 img.src = URL.createObjectURL(imageInput.files[0]);
             } else {
@@ -114,11 +106,24 @@
         });
 
         // Add download functionality
-        canvas.addEventListener('click', () => {
-            const link = document.createElement('a');
-            link.download = 'collage.png';
-            link.href = canvas.toDataURL();
-            link.click();
+        downloadButton.addEventListener('click', () => {
+            console.log("Download button clicked");
+            try {
+                const dataURL = canvas.toDataURL('image/png');
+                console.log("Data URL generated:", dataURL.substring(0, 100) + "..."); // Log first 100 chars of dataURL
+
+                const link = document.createElement('a');
+                link.download = 'collage.png';
+                link.href = dataURL;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+
+                console.log("Download link clicked");
+            } catch (error) {
+                console.error("Error during download:", error);
+                alert("An error occurred while trying to download the image. Please try again.");
+            }
         });
     </script>
 </body>
