@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dual Size Image Collage Generator (10x15 inches)</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            background-color: #f0f0f0;
+        }
+        canvas {
+            border: 1px solid #ddd;
+            max-width: 100%;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        input, select, button {
+            margin: 10px 0;
+            padding: 5px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <h1>Dual Size Image Collage Generator</h1>
+    <p>10x15 inches with White Background and Black Stroke</p>
+    <input type="file" id="imageInput" accept="image/*">
+    <select id="sizeSelect">
+        <option value="35x45">35mm x 45mm</option>
+        <option value="2x2">2 inches x 2 inches</option>
+    </select>
+    <button id="generateButton">Generate Collage</button>
+    <canvas id="canvas"></canvas>
+
+    <script>
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        const imageInput = document.getElementById('imageInput');
+        const sizeSelect = document.getElementById('sizeSelect');
+        const generateButton = document.getElementById('generateButton');
+
+        // Set canvas size (10x15 inches at 300 DPI)
+        const dpi = 300;
+        canvas.width = 10 * dpi;  // 10 inches wide
+        canvas.height = 15 * dpi; // 15 inches tall
+
+        generateButton.addEventListener('click', () => {
+            if (imageInput.files && imageInput.files[0]) {
+                const img = new Image();
+                img.onload = function() {
+                    // Set white background
+                    ctx.fillStyle = 'white';
+                    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                    // Get selected size
+                    const selectedSize = sizeSelect.value;
+                    let imageWidth, imageHeight;
+
+                    if (selectedSize === '35x45') {
+                        imageWidth = 35 * dpi / 25.4;  // Convert mm to inches, then to pixels
+                        imageHeight = 45 * dpi / 25.4;
+                    } else {
+                        imageWidth = imageHeight = 2 * dpi;
+                    }
+
+                    // Calculate the number of images that fit in the canvas
+                    const imagesPerRow = Math.floor(canvas.width / imageWidth);
+                    const imagesPerColumn = Math.floor(canvas.height / imageHeight);
+
+                    // Calculate spacing
+                    const horizontalSpacing = (canvas.width - imagesPerRow * imageWidth) / (imagesPerRow + 1);
+                    const verticalSpacing = (canvas.height - imagesPerColumn * imageHeight) / (imagesPerColumn + 1);
+
+                    for (let row = 0; row < imagesPerColumn; row++) {
+                        for (let col = 0; col < imagesPerRow; col++) {
+                            const x = horizontalSpacing + col * (imageWidth + horizontalSpacing);
+                            const y = verticalSpacing + row * (imageHeight + verticalSpacing);
+                            
+                            // Draw the image
+                            ctx.drawImage(
+                                img,
+                                x,
+                                y,
+                                imageWidth,
+                                imageHeight
+                            );
+
+                            // Add 1px black stroke
+                            ctx.strokeStyle = 'black';
+                            ctx.lineWidth = 1;
+                            ctx.strokeRect(x, y, imageWidth, imageHeight);
+                        }
+                    }
+                };
+                img.src = URL.createObjectURL(imageInput.files[0]);
+            } else {
+                alert('Please select an image first.');
+            }
+        });
+
+        // Add download functionality
+        canvas.addEventListener('click', () => {
+            const link = document.createElement('a');
+            link.download = 'collage.png';
+            link.href = canvas.toDataURL();
+            link.click();
+        });
+    </script>
+</body>
+</html>
