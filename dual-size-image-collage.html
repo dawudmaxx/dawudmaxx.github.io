@@ -107,6 +107,7 @@
         const croppedImage = document.getElementById('croppedImage');
 
         let cropper;
+        let currentAspectRatio = 1; // Default aspect ratio
 
         // Set canvas size (10x15 inches at 300 DPI)
         const dpi = 300;
@@ -128,7 +129,7 @@
                     }
 
                     cropper = new Cropper(imageToCrop, {
-                        aspectRatio: 1,
+                        aspectRatio: currentAspectRatio,
                         viewMode: 1,
                         responsive: true,
                     });
@@ -138,8 +139,9 @@
         });
 
         aspectRatioSelect.addEventListener('change', function() {
+            currentAspectRatio = parseFloat(this.value);
             if (cropper) {
-                cropper.setAspectRatio(parseFloat(this.value));
+                cropper.setAspectRatio(currentAspectRatio);
             }
         });
 
@@ -160,29 +162,37 @@
             ctx.fillStyle = 'white';
             ctx.fillRect(0, 0, canvas.width, canvas.height);
 
+            // Calculate the image size based on the aspect ratio
+            let imageWidth, imageHeight;
+            if (currentAspectRatio === 1) {
+                imageWidth = imageHeight = 2 * dpi; // 2 inches for 1:1 ratio
+            } else {
+                imageWidth = 3.5 * dpi; // 3.5 inches wide for 3.5:4.5 ratio
+                imageHeight = 4.5 * dpi; // 4.5 inches tall for 3.5:4.5 ratio
+            }
+
             // Calculate the spacing between images
-            const imageSize = 2 * dpi; // 2 inches at 300 DPI
-            const horizontalSpacing = (canvas.width - 4 * imageSize) / 5; // 5 spaces for 4 images
-            const verticalSpacing = (canvas.height - 7 * imageSize) / 8; // 8 spaces for 7 images
+            const horizontalSpacing = (canvas.width - 4 * imageWidth) / 5; // 5 spaces for 4 images
+            const verticalSpacing = (canvas.height - 7 * imageHeight) / 8; // 8 spaces for 7 images
 
             for (let row = 0; row < 7; row++) {
                 for (let col = 0; col < 4; col++) {
-                    const x = horizontalSpacing + col * (imageSize + horizontalSpacing);
-                    const y = verticalSpacing + row * (imageSize + verticalSpacing);
+                    const x = horizontalSpacing + col * (imageWidth + horizontalSpacing);
+                    const y = verticalSpacing + row * (imageHeight + verticalSpacing);
                     
                     // Draw the image
                     ctx.drawImage(
                         croppedImage,
                         x,
                         y,
-                        imageSize,
-                        imageSize
+                        imageWidth,
+                        imageHeight
                     );
 
                     // Add 1px black stroke
                     ctx.strokeStyle = 'black';
                     ctx.lineWidth = 1;
-                    ctx.strokeRect(x, y, imageSize, imageSize);
+                    ctx.strokeRect(x, y, imageWidth, imageHeight);
                 }
             }
 
