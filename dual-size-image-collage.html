@@ -6,7 +6,65 @@
     <title>4x7 Image Collage Generator with Cropping</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropper/4.1.0/cropper.min.css">
     <style>
-        /* ... (styles remain the same) ... */
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            background-color: #f0f0f0;
+        }
+        canvas, #cropperContainer, #croppedImageContainer {
+            border: 1px solid #ddd;
+            max-width: 100%;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        input, button, #downloadLink, select {
+            margin: 10px 0;
+        }
+        button, #downloadLink, select {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+        }
+        button:hover, #downloadLink:hover, select:hover {
+            background-color: #45a049;
+        }
+        #downloadLink {
+            background-color: #008CBA;
+        }
+        #downloadLink:hover {
+            background-color: #007B9A;
+        }
+        #downloadLink.disabled {
+            background-color: #cccccc;
+            color: #666666;
+            cursor: not-allowed;
+        }
+        #cropperContainer, #croppedImageContainer {
+            max-width: 500px;
+            max-height: 500px;
+        }
+        #croppedImage {
+            max-width: 100%;
+            max-height: 100%;
+        }
+        .flex-container {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            max-width: 1000px;
+        }
+        .flex-item {
+            width: 48%;
+        }
     </style>
 </head>
 <body>
