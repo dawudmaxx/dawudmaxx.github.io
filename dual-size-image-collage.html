@@ -210,14 +210,15 @@
             }
         }
 
-        // Add event listener for download link
+        // Modified event listener for download link
         downloadLink.addEventListener('click', function(e) {
+            e.preventDefault(); // Prevent the default link behavior
+
             if (this.classList.contains('disabled')) {
-                e.preventDefault();
                 alert("Please generate the collage first.");
             } else {
                 console.log("Download initiated");
-                // Force download for browsers that don't support the download attribute
+                // Force download using only the programmatic method
                 const link = document.createElement('a');
                 link.href = this.href;
                 link.download = this.download;
