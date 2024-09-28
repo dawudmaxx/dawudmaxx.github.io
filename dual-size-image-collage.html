@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>4x7 Image Collage Generator with Cropping</title>
+    <title>Flexible Image Collage Generator with Cropping</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropper/4.1.0/cropper.min.css">
     <style>
         body {
@@ -68,7 +68,7 @@
     </style>
 </head>
 <body>
-    <h1>4x7 Image Collage Generator with Cropping</h1>
+    <h1>Flexible Image Collage Generator with Cropping</h1>
     <p>10x15 inches with White Background and Black Stroke</p>
     <input type="file" id="imageInput" accept="image/*">
     <div class="flex-container">
@@ -171,12 +171,20 @@
                 imageHeight = 4.5 * dpi; // 4.5 inches tall for 3.5:4.5 ratio
             }
 
-            // Calculate the spacing between images
-            const horizontalSpacing = (canvas.width - 4 * imageWidth) / 5; // 5 spaces for 4 images
-            const verticalSpacing = (canvas.height - 7 * imageHeight) / 8; // 8 spaces for 7 images
+            // Calculate how many images can fit horizontally and vertically
+            const horizontalCount = Math.floor(canvas.width / imageWidth);
+            const verticalCount = Math.floor(canvas.height / imageHeight);
 
-            for (let row = 0; row < 7; row++) {
-                for (let col = 0; col < 4; col++) {
+            // Calculate the total horizontal and vertical spacing
+            const totalHorizontalSpacing = canvas.width - (horizontalCount * imageWidth);
+            const totalVerticalSpacing = canvas.height - (verticalCount * imageHeight);
+
+            // Calculate the spacing between images
+            const horizontalSpacing = totalHorizontalSpacing / (horizontalCount + 1);
+            const verticalSpacing = totalVerticalSpacing / (verticalCount + 1);
+
+            for (let row = 0; row < verticalCount; row++) {
+                for (let col = 0; col < horizontalCount; col++) {
                     const x = horizontalSpacing + col * (imageWidth + horizontalSpacing);
                     const y = verticalSpacing + row * (imageHeight + verticalSpacing);
                     
