@@ -58,6 +58,19 @@
             height: 600px;
             border: none;
         }
+        .scholar-link {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #4285F4;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+        .scholar-link:hover {
+            background-color: #3367D6;
+        }
     </style>
 </head>
 <body>
@@ -98,7 +111,8 @@
         <div id="google-scholar" class="card-content">
             <div class="card">
                 <h2>Google Scholar Profile</h2>
-                <iframe src="https://scholar.google.com/citations?user=qmRuCaMAAAAJ&hl=en"></iframe>
+                <p>Click the button below to view my Google Scholar profile in a new tab:</p>
+                <a href="https://scholar.google.com/citations?user=qmRuCaMAAAAJ&hl=en" target="_blank" rel="noopener noreferrer" class="scholar-link">View Google Scholar Profile</a>
             </div>
         </div>
         
