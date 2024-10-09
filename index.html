@@ -1,37 +1,129 @@
-<html>
-
-<style>
-div {
-  background-color: linen;
-  margin-top: 5px;
-  margin-bottom: 5px;  
-} 
-div.list:hover {
-  background-color: palegreen;
-}
-div.list a:hover {
-  color: black;
-  font-weight: bold;
-}
-</style>
-  
+<!DOCTYPE html>
+<html lang="en">
 <head>
-<title> Mohammad Dawud Ansari </title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mohammad Dawud Ansari</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        .tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        .tab {
+            padding: 10px 20px;
+            background-color: #ddd;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .tab:hover, .tab.active {
+            background-color: #bbb;
+        }
+        .card {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin-top: 20px;
+        }
+        .card-content {
+            display: none;
+        }
+        .card-content.active {
+            display: block;
+        }
+        img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+        }
+        iframe {
+            width: 100%;
+            height: 600px;
+            border: none;
+        }
+    </style>
 </head>
 <body>
-<h1>
-Howdy
-</h1>
-  
-  <p> <img width="500" src="me1.jpg" style="float: left; margin-right: 5px;"> </img>
-  My name is Mohammad Dawud Ansari. I am a tech enthusiastic. 
-  I like to turn ideas into a real life product, that solves real problems.
-  <p>
-  <div class="list"> <a href="Confluence-space-export-143530.html\161585342\1394114561.html">Project Flow</a> </div>
-  <div class="list"> <a href="profile\dawud\index.html"> Profile </a> </div>  
-  <div class="list"> <a href="https://scholar.google.com/citations?user=qmRuCaMAAAAJ&hl=en"> Google Scholar Profile </a> </div>
-  <div class="list"> <a href="dual-size-image-collage.html"> Create collage </a> </div>
-  
-<body>
+    <div class="container">
+        <h1>Mohammad Dawud Ansari</h1>
+        
+        <div class="tabs">
+            <button class="tab active" onclick="openTab(event, 'home')">Home</button>
+            <button class="tab" onclick="openTab(event, 'project-flow')">Project Flow</button>
+            <button class="tab" onclick="openTab(event, 'profile')">Profile</button>
+            <button class="tab" onclick="openTab(event, 'google-scholar')">Google Scholar</button>
+            <button class="tab" onclick="openTab(event, 'create-collage')">Create Collage</button>
+        </div>
+        
+        <div id="home" class="card-content active">
+            <div class="card">
+                <img src="profile/dawud/images/bhai.png" alt="Mohammad Dawud Ansari" style="float: left; margin-right: 20px; max-width: 300px;">
+                <h2>Welcome!</h2>
+                <p>My name is Mohammad Dawud Ansari. I am a tech enthusiast.</p>
+                <p>I like to turn ideas into real-life products that solve real problems.</p>
+            </div>
+        </div>
+        
+        <div id="project-flow" class="card-content">
+            <div class="card">
+                <h2>Project Flow</h2>
+                <iframe src="Confluence-space-export-143530.html\161585342\1394114561.html"></iframe>
+            </div>
+        </div>
+        
+        <div id="profile" class="card-content">
+            <div class="card">
+                <h2>Profile</h2>
+                <iframe src="profile\dawud\index.html"></iframe>
+            </div>
+        </div>
+        
+        <div id="google-scholar" class="card-content">
+            <div class="card">
+                <h2>Google Scholar Profile</h2>
+                <iframe src="https://scholar.google.com/citations?user=qmRuCaMAAAAJ&hl=en"></iframe>
+            </div>
+        </div>
+        
+        <div id="create-collage" class="card-content">
+            <div class="card">
+                <h2>Create Collage</h2>
+                <iframe src="dual-size-image-collage.html"></iframe>
+            </div>
+        </div>
+    </div>
 
+    <script>
+        function openTab(evt, tabName) {
+            var i, tabContent, tabLinks;
+            tabContent = document.getElementsByClassName("card-content");
+            for (i = 0; i < tabContent.length; i++) {
+                tabContent[i].style.display = "none";
+            }
+            tabLinks = document.getElementsByClassName("tab");
+            for (i = 0; i < tabLinks.length; i++) {
+                tabLinks[i].className = tabLinks[i].className.replace(" active", "");
+            }
+            document.getElementById(tabName).style.display = "block";
+            evt.currentTarget.className += " active";
+        }
+    </script>
+</body>
 </html>
