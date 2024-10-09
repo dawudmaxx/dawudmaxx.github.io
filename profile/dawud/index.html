@@ -1,133 +1,157 @@
-<html style="margin: 0px; padding: 0px;">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-		<link rel="icon"
-		      type="image/ico"
-		      href="images/favicon.ico"
-		/>
-	        <style>
-			.border {
-				border: 2px black solid;
-			}
-			.a{
-				text-decoration: none;
-			}
-		</style>
-
-		<meta charset="utf-8" />
-		<title>Dawud Resume</title>
-		<meta name="description" content="app, web app, responsive, admin dashboard, admin, flat, flat ui, ui kit, off screen nav" />
-		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-
-		<meta http-equiv="cache-control" content="max-age=0" />
-		<meta http-equiv="cache-control" content="no-cache" />
-		<meta http-equiv="expires" content="0" />
-		<meta http-equiv="expires" content="Tue, 01 Jan 1980 1:00:00 GMT" />
-		<meta http-equiv="pragma" content="no-cache" />
-
-		<link rel="stylesheet" href="css/bootstrap.css" type="text/css" />
-		<link rel="stylesheet" href="css/animate.css" type="text/css" />
-		<link rel="stylesheet" href="css/font-awesome.min.css" type="text/css" />
-		<link rel="stylesheet" href="css/font.css" type="text/css" />
-		<link rel="stylesheet" href="js/fuelux/fuelux.css" type="text/css" />
-		<link rel="stylesheet" href="css/app.css" type="text/css" />
-		<!--[if lt IE 9]>
-		<script src="js/ie/html5shiv.js"></script>
-		<script src="js/ie/respond.min.js"></script>
-		<script src="js/ie/excanvas.js"></script>
-		<![endif]-->
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mohammad Dawud Ansari - Resume</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        .profile-img {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 30px;
+        }
+        .header-content h1 {
+            margin: 0;
+            color: #2c3e50;
+        }
+        .contact-info {
+            margin-top: 10px;
+            font-size: 0.9em;
+        }
+        .main-content {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+        .section {
+            flex-basis: calc(50% - 20px);
+            margin-bottom: 30px;
+        }
+        h2, h3 {
+            color: #2c3e50;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+        ul {
+            padding-left: 20px;
+        }
+        li {
+            margin-bottom: 15px;
+        }
+        a {
+            color: #3498db;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        a:hover {
+            color: #2980b9;
+        }
+        .project {
+            margin-bottom: 30px;
+        }
+        .project h3 {
+            margin-bottom: 10px;
+        }
+        iframe {
+            max-width: 100%;
+            border: none;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        @media (max-width: 768px) {
+            .main-content {
+                flex-direction: column;
+            }
+            .section {
+                flex-basis: 100%;
+            }
+        }
+    </style>
 </head>
-
-<body style="margin: 0px; padding: 0px;">
-	<div style="overflow: hidden; width:100%">
-		<div style="float: left; margin: 20px;">
-			<img src="https://dawudmaxx.github.io/profile/dawud/images/bhai.png" width="100" />
-			<h2 align="left">Mohammad Dawud Ansari</h2>
-			<div style="float: none;">
-				Furtwanger Str. 4,
-				<br/>
-				Boeblingen - 71034
-				<br/>
-				Germany
-				<br/>
-				Email: MohammadDawud{dot}Ansari{at}de{dot}bosch{dot}com
-				<br/>
-				<br/>
-				<strong><a href="https://dawudmaxx.github.io/profile/dawud/resume" style="text-decoration: underline;" target="_blank">Full CV</a></strong>
-				<br/>
-				<h3>Publications</h3>
-				 <ul>
-				  <li>
-						<span>
-						<strong>Mohammad Dawud Ansari</strong>, Stephan Krauß, Oliver Wasenmüller, and <br>Didier Stricker.
-						"ScaleNet: Scale Invariant Network for Semantic <br>Segmentation in Urban DrivingScenes."
-						<i>International Conference on <br>Computer Vision Theory and Applications , Funchal, Madeira - Portugal;</i> <br>January 2018.
-						</span>
-						<strong><a href="https://www.scitepress.org/Papers/2018/67230/67230.pdf" style="text-decoration: underline;" target="_blank">paper</a></strong>
-				  </li>
-				  <li>
-						<span>
-						<strong>Mohammad Dawud Ansari</strong>, Vladislav Golyanik, and Didier Stricker.
-						<br>"Scalable Dense Monocular Surface Reconstruction."
-						<i>International Conference <br>on 3D Vision (3DV), Qingdao, China;</i> October 2017.
-						</span>
-						<strong><a href="https://ieeexplore.ieee.org/document/8374560" style="text-decoration: underline;" target="_blank">paper</a></strong>
-				  </li>
-				  <li>Oliver Wasenmüller , <strong>Mohammad Dawud Ansari</strong>, Didier Stricker.
-				      <br>"DNA-SLAM: Dense Noise Aware SLAM for ToF RGB-D Cameras".
-					  <br><i>Asian Conference on Computer Vision Workshop (ACCV workshop), <br>Taiwan;</i> Nov'2016
-					  <strong><a href="https://link.springer.com/chapter/10.1007/978-3-319-54407-6_42" style="text-decoration: underline;" target="_blank">paper</a></strong>
-				  </li>
-				  <li>
-						<span>
-						Gurjashan Singh Pannu, <strong>Mohammad Dawud Ansari</strong>, and Pritha Gupta.
-						<br>"Design and Implementation of Autonomous Car using Raspberry Pi."
-						<br> <i>International Journal of Computer Applications (IJCA)</i> 113, no. 9 (2015).
-						</span>
-						<strong><a href="http://research.ijcaonline.org/volume113/number9/pxc3901789.pdf" style="text-decoration: underline;" target="_blank">paper</a></strong>
-				  </li>
-				</ul>
-			</div>
-		</div>
-
-		<div style="float: left; margin:20px 20px 20px 0">
-			<H3 style="padding: 10px; margin:0px;">PROJECT: Autonomous Car</H1>
-			<div>
-				<iframe width="360" height="250" src="https://www.youtube.com/embed/VcWkJFspSf4" frameborder="0" allowfullscreen></iframe>
-			</div>
-			<br/><br/><br/>
-			<div>
-				<iframe width="360" height="250" src="https://www.youtube.com/embed/Ho48goh7wHo" frameborder="0" allowfullscreen></iframe>
-			</div>
-		</div>
-
-		<div style="float: left; margin:20px 20px 20px 0">
-			<H3 style="padding: 10px; margin:0px;">PROJECT: DNA-SLAM</H1>
-			<!--- <div> --->
-			<div style="margin-left: 10 px">
-				<iframe width="360" height="250" src="https://www.youtube.com/embed/wOPXOlg393E?ecver=2" frameborder="0" allowfullscreen>
-				</iframe>
-			</div>
-
-			<H3 style="padding: 10px; margin:0px;">PROJECT: Scalable Dense NRSfM</H1>
-			<div>
-				<iframe width="360" height="250" src="https://www.youtube.com/embed/XVl6XOVZroA" frameborder="0" allowfullscreen>
-				</iframe>
-			</div>
-		</div>
-	</div>
-
-		<script src="js/jquery.min.js"></script>
-		<!-- Bootstrap -->
-		<script src="js/bootstrap.js"></script>
-		<!-- App -->
-		<script src="js/app.js"></script>
-		<script src="js/app.plugin.js"></script>
-		<script src="js/slimscroll/jquery.slimscroll.min.js"></script>
-		<!-- fuelux -->
-		<script src="js/fuelux/fuelux.js"></script>
-
-		<!-- for form wizard -->
-		<script src="js/parsley/parsley.min.js"></script>
+<body>
+    <div class="container">
+        <header>
+            <img src="https://dawudmaxx.github.io/profile/dawud/images/bhai.png" alt="Mohammad Dawud Ansari" class="profile-img">
+            <div class="header-content">
+                <h1>Mohammad Dawud Ansari</h1>
+                <div class="contact-info">
+                    <p>Furtwanger Str. 4, Boeblingen - 71034, Germany</p>
+                    <p>Email: MohammadDawud{dot}Ansari{at}de{dot}bosch{dot}com</p>
+                    <p><a href="https://dawudmaxx.github.io/profile/dawud/resume" target="_blank">Full CV</a></p>
+                </div>
+            </div>
+        </header>
+        
+        <div class="main-content">
+            <section class="section">
+                <h2>Publications</h2>
+                <ul>
+                    <li>
+                        <strong>Mohammad Dawud Ansari</strong>, Stephan Krauß, Oliver Wasenmüller, and Didier Stricker.
+                        "ScaleNet: Scale Invariant Network for Semantic Segmentation in Urban DrivingScenes."
+                        <em>International Conference on Computer Vision Theory and Applications, Funchal, Madeira - Portugal; January 2018.</em>
+                        <a href="https://www.scitepress.org/Papers/2018/67230/67230.pdf" target="_blank">paper</a>
+                    </li>
+                    <li>
+                        <strong>Mohammad Dawud Ansari</strong>, Vladislav Golyanik, and Didier Stricker.
+                        "Scalable Dense Monocular Surface Reconstruction."
+                        <em>International Conference on 3D Vision (3DV), Qingdao, China; October 2017.</em>
+                        <a href="https://ieeexplore.ieee.org/document/8374560" target="_blank">paper</a>
+                    </li>
+                    <li>
+                        Oliver Wasenmüller, <strong>Mohammad Dawud Ansari</strong>, Didier Stricker.
+                        "DNA-SLAM: Dense Noise Aware SLAM for ToF RGB-D Cameras".
+                        <em>Asian Conference on Computer Vision Workshop (ACCV workshop), Taiwan; Nov'2016</em>
+                        <a href="https://link.springer.com/chapter/10.1007/978-3-319-54407-6_42" target="_blank">paper</a>
+                    </li>
+                    <li>
+                        Gurjashan Singh Pannu, <strong>Mohammad Dawud Ansari</strong>, and Pritha Gupta.
+                        "Design and Implementation of Autonomous Car using Raspberry Pi."
+                        <em>International Journal of Computer Applications (IJCA) 113, no. 9 (2015).</em>
+                        <a href="http://research.ijcaonline.org/volume113/number9/pxc3901789.pdf" target="_blank">paper</a>
+                    </li>
+                </ul>
+            </section>
+            
+            <section class="section">
+                <h2>Projects</h2>
+                <div class="project">
+                    <h3>Autonomous Car</h3>
+                    <iframe width="100%" height="250" src="https://www.youtube.com/embed/VcWkJFspSf4" allowfullscreen></iframe>
+                    <iframe width="100%" height="250" src="https://www.youtube.com/embed/Ho48goh7wHo" allowfullscreen></iframe>
+                </div>
+                <div class="project">
+                    <h3>DNA-SLAM</h3>
+                    <iframe width="100%" height="250" src="https://www.youtube.com/embed/wOPXOlg393E?ecver=2" allowfullscreen></iframe>
+                </div>
+                <div class="project">
+                    <h3>Scalable Dense NRSfM</h3>
+                    <iframe width="100%" height="250" src="https://www.youtube.com/embed/XVl6XOVZroA" allowfullscreen></iframe>
+                </div>
+            </section>
+        </div>
+    </div>
 </body>
 </html>
