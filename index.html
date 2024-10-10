@@ -5,42 +5,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mohammad Dawud Ansari</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f0f0f0;
-        }
         .container {
             max-width: 1200px;
             margin: 0 auto;
             padding: 20px;
         }
-        h1 {
-            text-align: center;
-            color: #333;
-        }
         .tabs {
             display: flex;
-            justify-content: center;
+            gap: 10px;
             margin-bottom: 20px;
         }
         .tab {
             padding: 10px 20px;
-            background-color: #ddd;
-            border: none;
             cursor: pointer;
-            transition: background-color 0.3s;
+            border: 1px solid #ddd;
+            background: #f5f5f5;
         }
-        .tab:hover, .tab.active {
-            background-color: #bbb;
-        }
-        .card {
-            background-color: white;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            padding: 20px;
-            margin-top: 20px;
+        .tab.active {
+            background: #fff;
+            border-bottom: 2px solid #007bff;
         }
         .card-content {
             display: none;
@@ -48,44 +31,34 @@
         .card-content.active {
             display: block;
         }
-        img {
-            max-width: 100%;
-            height: auto;
-            border-radius: 8px;
-        }
-        iframe {
-            width: 100%;
-            height: 600px;
-            border: none;
+        .card {
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
         }
         .scholar-link {
             display: inline-block;
-            margin-top: 20px;
             padding: 10px 20px;
-            background-color: #4285F4;
+            background: #007bff;
             color: white;
             text-decoration: none;
-            border-radius: 5px;
-            transition: background-color 0.3s;
-        }
-        .scholar-link:hover {
-            background-color: #3367D6;
+            border-radius: 4px;
         }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>Mohammad Dawud Ansari</h1>
-        
+
         <div class="tabs">
-            <button class="tab active" onclick="openTab(event, 'home')">Home</button>
-            <button class="tab" onclick="openTab(event, 'project-flow')">Project Flow</button>
-            <button class="tab" onclick="openTab(event, 'profile')">Profile</button>
-            <button class="tab" onclick="openTab(event, 'google-scholar')">Google Scholar</button>
-            <button class="tab" onclick="openTab(event, 'create-collage')">Create Collage</button>
+            <a href="#home" class="tab" data-tab="home">Home</a>
+            <a href="#project-flow" class="tab" data-tab="project-flow">Project Flow</a>
+            <a href="#profile" class="tab" data-tab="profile">Profile</a>
+            <a href="#google-scholar" class="tab" data-tab="google-scholar">Google Scholar</a>
+            <a href="#create-collage" class="tab" data-tab="create-collage">Create Collage</a>
         </div>
-        
-        <div id="home" class="card-content active">
+
+        <div id="home" class="card-content">
             <div class="card">
                 <img src="profile/dawud/images/bhai.png" alt="Mohammad Dawud Ansari" style="float: left; margin-right: 20px; max-width: 300px;">
                 <h2>Welcome!</h2>
@@ -93,29 +66,29 @@
                 <p>I like to turn ideas into real-life products that solve real problems.</p>
             </div>
         </div>
-        
+
         <div id="project-flow" class="card-content">
             <div class="card">
                 <h2>Project Flow</h2>
                 <iframe src="Confluence-space-export-143530.html\161585342\1394114561.html"></iframe>
             </div>
         </div>
-        
+
         <div id="profile" class="card-content">
             <div class="card">
                 <h2>Profile</h2>
                 <iframe src="profile/dawud/index.html"></iframe>
             </div>
         </div>
-        
+
         <div id="google-scholar" class="card-content">
             <div class="card">
                 <h2>Google Scholar Profile</h2>
                 <p>Click the button below to view my Google Scholar profile in a new tab:</p>
-                <a href="https://scholar.google.com/citations?user=qmRuCaMAAAAJ&hl=en" target="_blank" rel="noopener noreferrer" class="scholar-link">View Google Scholar Profile</a>
+                <a href="https://scholar.google.com/citations?user=qmRuCaMAAAAJ&hl=en" class="scholar-link" target="_blank" rel="noopener noreferrer">View Google Scholar Profile</a>
             </div>
         </div>
-        
+
         <div id="create-collage" class="card-content">
             <div class="card">
                 <h2>Create Collage</h2>
@@ -125,19 +98,38 @@
     </div>
 
     <script>
-        function openTab(evt, tabName) {
-            var i, tabContent, tabLinks;
-            tabContent = document.getElementsByClassName("card-content");
-            for (i = 0; i < tabContent.length; i++) {
-                tabContent[i].style.display = "none";
+        document.addEventListener('DOMContentLoaded', function() {
+            const tabs = document.querySelectorAll('.tab');
+            const contents = document.querySelectorAll('.card-content');
+
+            function switchTab(tabId) {
+                // Update active tab and content
+                tabs.forEach(tab => {
+                    tab.classList.toggle('active', tab.dataset.tab === tabId);
+                });
+                contents.forEach(content => {
+                    content.classList.toggle('active', content.id === tabId);
+                });
             }
-            tabLinks = document.getElementsByClassName("tab");
-            for (i = 0; i < tabLinks.length; i++) {
-                tabLinks[i].className = tabLinks[i].className.replace(" active", "");
+
+            // Handle URL changes
+            function handleUrlChange() {
+                const hash = window.location.hash.slice(1) || 'home';
+                switchTab(hash);
             }
-            document.getElementById(tabName).style.display = "block";
-            evt.currentTarget.className += " active";
-        }
+
+            // Prevent default behavior for tab links and handle manually
+            tabs.forEach(tab => {
+                tab.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const tabId = tab.dataset.tab;
+                    window.location.hash = tabId === 'home' ? '' : tabId;
+                });
+            });
+
+            window.addEventListener('hashchange', handleUrlChange);
+            handleUrlChange(); // Handle initial load
+        });
     </script>
 </body>
 </html>
