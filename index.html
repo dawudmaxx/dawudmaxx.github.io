@@ -49,6 +49,16 @@
             text-decoration: none;
             border-radius: 4px;
         }
+        #verificationSection, #codeSection, #emailSection {
+            display: none;
+        }
+        #simulatedEmail {
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin-top: 20px;
+            border-radius: 4px;
+        }
     </style>
 </head>
 <body>
@@ -92,13 +102,63 @@
         </div>
 
         <div id="create-collage" class="card-content">
-            <div class="card">
-                <iframe src="dual-size-image-collage.html"></iframe>
+            <div class="card" class="container">
+                <h1>Email Verification</h1>
+                <div id="startSection">
+                    <button onclick="startVerification()">Start Verification</button>
+                </div>
+                <div id="emailSection">
+                    <h2>Simulated Email</h2>
+                    <div id="simulatedEmail"></div>
+                    <button onclick="showCodeInput()">Enter Code</button>
+                </div>
+                <div id="codeSection">
+                    <input type="text" id="codeInput" placeholder="Enter verification code">
+                    <button onclick="verifyCode()">Verify Code</button>
+                </div>
+                <div id="verificationSection">
+                    <iframe src="dual-size-image-collage.html"></iframe>
+                </div>
             </div>
         </div>
     </div>
 
     <script>
+        let verificationCode = '';
+        const recipientEmail = 'dawudmaxx@gmail.com';
+
+        function startVerification() {
+            // Generate a random 6-digit code
+            verificationCode = Math.floor(100000 + Math.random() * 900000).toString();
+
+            // Simulate sending an email by displaying it on the page
+            const emailContent = `
+                <p><strong>To:</strong> ${recipientEmail}</p>
+                <p><strong>Subject:</strong> Your Verification Code</p>
+                <p>Your verification code is: <strong>${verificationCode}</strong></p>
+                <p>Please enter this code on the verification page to continue.</p>
+            `;
+
+            document.getElementById('simulatedEmail').innerHTML = emailContent;
+            document.getElementById('startSection').style.display = 'none';
+            document.getElementById('emailSection').style.display = 'block';
+        }
+
+        function showCodeInput() {
+            document.getElementById('emailSection').style.display = 'none';
+            document.getElementById('codeSection').style.display = 'block';
+        }
+
+        function verifyCode() {
+            const enteredCode = document.getElementById('codeInput').value;
+            if (enteredCode === verificationCode) {
+                document.getElementById('codeSection').style.display = 'none';
+                document.getElementById('verificationSection').style.display = 'block';
+            } else {
+                alert('Invalid code. Please try again.');
+            }
+        }
+
         document.addEventListener('DOMContentLoaded', function() {
             const tabs = document.querySelectorAll('.tab');
             const contents = document.querySelectorAll('.card-content');
