@@ -105,14 +105,13 @@
                 <div id="startSection">
                     <h1>Verify your Email first to create Collage</h1>
                     <button onclick="startVerification()">Start Verification</button>
-                    <button onclick="sendEmail()">Send Email</button>
                 </div>
-                <div id="emailSection">
+                <!-- <div id="emailSection">
                     <h1>Copy Code</h1>
                     <h2>Simulated Email</h2>
                     <div id="simulatedEmail"></div>
                     <button onclick="showCodeInput()">Enter Code</button>
-                </div>
+                </div> -->
                 <div id="codeSection">
                     <h1>Paste the Copied Code for Email Verification</h1>
                     <input type="text" id="codeInput" placeholder="Enter verification code">
@@ -127,17 +126,14 @@
     <script type="text/javascript" src="https://cdn.emailjs.com/dist/email.min.js"></script>
     <script type="text/javascript">
         (function() {
-            // Initialize EmailJS with your user ID
-            emailjs.init("aEiSwsMQttyYOsrv7"); // Replace with your User ID from EmailJS Dashboard
+            emailjs.init("aEiSwsMQttyYOsrv7"); // Replace with your Public Key from EmailJS Dashboard
         })();
 
-        function sendEmail() {
+        function sendEmail(recipient_email, code) {
             // Prepare email parameters
             const emailParams = {
-                to_name: "xyz",
-                to_email: "mohammaddawud.ansari@de.bosch.com",
-                from_name: "Mohammad Dawud Ansari",
-                message: "Hello! This is a test email."
+                to_email: recipient_email,
+                verification_code: code
             };
 
             // Send email via EmailJS
@@ -160,20 +156,23 @@
             verificationCode = Math.floor(100000 + Math.random() * 900000).toString();
 
             // Simulate sending an email by displaying it on the page
-            const emailContent = `
-                <p><strong>To:</strong> ${recipientEmail}</p>
-                <p><strong>Subject:</strong> Your Verification Code</p>
-                <p>Your verification code is: <strong>${verificationCode}</strong></p>
-                <p>Please enter this code on the verification page to continue.</p>
-            `;
+            // const emailContent = `
+            //     <p><strong>To:</strong> ${recipientEmail}</p>
+            //     <p><strong>Subject:</strong> Your Verification Code</p>
+            //     <p>Your verification code is: <strong>${verificationCode}</strong></p>
+            //     <p>Please enter this code on the verification page to continue.</p>
+            // `;
 
-            document.getElementById('simulatedEmail').innerHTML = emailContent;
-            document.getElementById('startSection').style.display = 'none';
-            document.getElementById('emailSection').style.display = 'block';
+            // document.getElementById('simulatedEmail').innerHTML = emailContent;
+            // document.getElementById('startSection').style.display = 'none';
+            // document.getElementById('emailSection').style.display = 'block';
+            sendEmail(recipientEmail, verificationCode);
+
+            showCodeInput();
         }
 
         function showCodeInput() {
-            document.getElementById('emailSection').style.display = 'none';
+            // document.getElementById('emailSection').style.display = 'none';
             document.getElementById('codeSection').style.display = 'block';
         }
 
