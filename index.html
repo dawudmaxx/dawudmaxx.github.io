@@ -105,6 +105,7 @@
                 <div id="startSection">
                     <h1>Verify your Email first to create Collage</h1>
                     <button onclick="startVerification()">Start Verification</button>
+                    <button onclick="skipVerification()">Skip Verification</button>
                 </div>
                 <!-- <div id="emailSection">
                     <h1>Copy Code</h1>
@@ -126,7 +127,7 @@
     <script type="text/javascript" src="https://cdn.emailjs.com/dist/email.min.js"></script>
     <script type="text/javascript">
         (function() {
-            emailjs.init("aEiSwsMQttyYOsrv7"); // Replace with your Public Key from EmailJS Dashboard
+            emailjs.init("dFYIGRUa1_FUCxT1QqKz7"); // Replace with your Public Key from EmailJS Dashboard
         })();
 
         function sendEmail(recipient_email, code) {
@@ -164,7 +165,7 @@
             // `;
 
             // document.getElementById('simulatedEmail').innerHTML = emailContent;
-            // document.getElementById('startSection').style.display = 'none';
+            document.getElementById('startSection').style.display = 'none';
             // document.getElementById('emailSection').style.display = 'block';
             sendEmail(recipientEmail, verificationCode);
 
@@ -184,6 +185,13 @@
             } else {
                 alert('Invalid code. Please try again.');
             }
+        }
+
+        function skipVerification()
+        {
+            document.getElementById('startSection').style.display = 'none';
+            document.getElementById('codeSection').style.display = 'none';
+            document.getElementById('verificationSection').style.display = 'block';
         }
 
         document.addEventListener('DOMContentLoaded', function() {
