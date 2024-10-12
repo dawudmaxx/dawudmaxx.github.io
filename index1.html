@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Colorful Tabbed Website</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.5/ScrollToPlugin.min.js"></script>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: Arial, sans-serif;
+        }
+        .tab-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: #333;
+            padding: 10px;
+            z-index: 1000;
+        }
+        .tab {
+            display: inline-block;
+            padding: 10px 20px;
+            margin: 0 5px;
+            background: #f0f0f0;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .tab:hover {
+            background: #e0e0e0;
+        }
+        .tab.active {
+            background: #fff;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        .content {
+            padding-top: 60px;
+        }
+        .card {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2em;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+        .card img {
+            position: absolute;
+            top: 60px; /* Updated to account for tab height */
+            left: 0;
+            width: 200px;
+            height: 200px;
+            object-fit: cover;
+        }
+        #card1 { background: #FF6B6B; }
+        #card2 { background: #4ECDC4; }
+        #card3 { background: #45B7D1; }
+        #card4 { background: #FFA07A; }
+        #card5 { background: #98D8C8; }
+    </style>
+</head>
+<body>
+    <div class="tab-container">
+        <div class="tab active" data-target="card1">Tab 1</div>
+        <div class="tab" data-target="card2">Tab 2</div>
+        <div class="tab" data-target="card3">Tab 3</div>
+        <div class="tab" data-target="card4">Tab 4</div>
+        <div class="tab" data-target="card5">Tab 5</div>
+    </div>
+    <div class="content">
+        <div id="card1" class="card">
+            <img src="/api/placeholder/200/200" alt="GIF 1">
+            Content for Tab 1
+        </div>
+        <div id="card2" class="card">
+            <img src="/api/placeholder/200/200" alt="GIF 2">
+            Content for Tab 2
+        </div>
+        <div id="card3" class="card">
+            <img src="/api/placeholder/200/200" alt="GIF 3">
+            Content for Tab 3
+        </div>
+        <div id="card4" class="card">
+            <img src="/api/placeholder/200/200" alt="GIF 4">
+            Content for Tab 4
+        </div>
+        <div id="card5" class="card">
+            <img src="/api/placeholder/200/200" alt="GIF 5">
+            Content for Tab 5
+        </div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const tabs = document.querySelectorAll('.tab');
+            const cards = document.querySelectorAll('.card');
+
+            function setActiveTab(targetId) {
+                tabs.forEach(tab => {
+                    if (tab.dataset.target === targetId) {
+                        tab.classList.add('active');
+                    } else {
+                        tab.classList.remove('active');
+                    }
+                });
+            }
+
+            function scrollToCard(targetId) {
+                gsap.to(window, {duration: 1, scrollTo: {y: `#${targetId}`, offsetY: 60}, ease: "power2.inOut"});
+            }
+
+            tabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    const targetId = this.dataset.target;
+                    scrollToCard(targetId);
+                    setActiveTab(targetId);
+                    window.history.pushState(null, '', `#${targetId}`);
+                });
+            });
+
+            window.addEventListener('scroll', function() {
+                let closestCard = null;
+                let closestDistance = Infinity;
+
+                cards.forEach(card => {
+                    const rect = card.getBoundingClientRect();
+                    const distance = Math.abs(rect.top - 60); // Adjusted for tab height
+                    if (distance < closestDistance) {
+                        closestDistance = distance;
+                        closestCard = card;
+                    }
+                });
+
+                if (closestCard) {
+                    setActiveTab(closestCard.id);
+                    window.history.replaceState(null, '', `#${closestCard.id}`);
+                }
+            });
+
+            if (window.location.hash) {
+                const targetId = window.location.hash.substring(1);
+                scrollToCard(targetId);
+                setActiveTab(targetId);
+            }
+        });
+    </script>
+</body>
+</html>
