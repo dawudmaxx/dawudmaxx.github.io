@@ -1,0 +1,31 @@
+[core]
+    autocrlf = input
+    whitespace = trailing-space,space-before-tab
+    ignorecase = false
+
+[pull]
+    rebase = false
+
+[push]
+    default = simple
+
+[color]
+    ui = auto
+
+[commit]
+    template = .gitmessage
+
+[blame]
+    ignoreRevsFile = .git-blame-ignore-revs
+
+# Recommended aliases for this project
+[alias]
+    st = status
+    co = checkout
+    br = branch
+    ci = commit
+    lg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
+
+[user]
+    name = "Dawud"
+    email = "dawudmaxx@gmail.com"
