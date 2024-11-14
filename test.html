@@ -90,54 +90,8 @@
         <div class="embed-section">
             <div class="embed-title">Basic iframe Embedding</div>
             <div class="embed-description">Simple iframe with fixed dimensions</div>
-            <iframe src="www.dawudmaxx.com" width="100%" height="300"></iframe>
+            <iframe src="https://dawudmaxx.com" width="100%" height="300"></iframe>
             <div class="note">Note: Some websites may block iframe embedding due to X-Frame-Options headers</div>
-        </div>
-
-        <!-- iframe with sandbox -->
-        <div class="embed-section">
-            <div class="embed-title">Sandboxed iframe</div>
-            <div class="embed-description">Enhanced security with sandbox attributes</div>
-            <iframe 
-                src="www.dawudmaxx.com"
-                width="100%"
-                height="300"
-                sandbox="allow-same-origin allow-scripts allow-popups allow-forms"
-            ></iframe>
-            <div class="note">Restricted permissions for better security</div>
-        </div>
-
-        <!-- Embed using object -->
-        <div class="embed-section">
-            <div class="embed-title">Object Embedding</div>
-            <div class="embed-description">Alternative to iframe using object tag</div>
-            <object 
-                data="www.dawudmaxx.com"
-                type="text/html"
-                width="100%"
-                height="300">
-                <p>Unable to display website</p>
-            </object>
-        </div>
-
-        <!-- Controlled iframe -->
-        <div class="embed-section">
-            <div class="embed-title">Controlled iframe</div>
-            <div class="embed-description">iframe with JavaScript controls</div>
-            <iframe 
-                id="controllableFrame"
-                src="www.dawudmaxx.com"
-                width="100%"
-                height="300">
-            </iframe>
-            <div class="controls">
-                <button onclick="document.getElementById('controllableFrame').src='https://example.com'">
-                    Load Example.com
-                </button>
-                <button onclick="document.getElementById('controllableFrame').src='https://example.org'">
-                    Load Example.org
-                </button>
-            </div>
         </div>
     </div>
 
