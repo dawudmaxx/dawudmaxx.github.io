@@ -20,7 +20,8 @@
 <body>
     <h1>Dual Size Collage Photo Generator</h1>
     <p>Select an image, choose format, and generate a collage for 10cm x 15cm print.</p>
-
+    <button onclick="document.getElementById('fileInput').click()">Select Image</button>
+    <input type="file" id="fileInput" style="display: none;" accept="image/*">
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
         <defs>
           <pattern id="gridPattern" width="20" height="20" patternUnits="userSpaceOnUse">
@@ -64,8 +65,7 @@
         </div>
     </div>
 
-    <button onclick="document.getElementById('fileInput').click()">Select Image</button>
-    <input type="file" id="fileInput" style="display: none;" accept="image/*">
+    
     <button onclick="cropImage()">Crop Image</button>
     <button onclick="generateCollage()">Generate Collage</button>
     <a id="downloadLink" class="button" download="collage.png" style="display: none;">Download Collage</a>
