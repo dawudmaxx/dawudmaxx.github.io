@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Passport Photo Collage Generator</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            border: 1px solid #ddd;
+        }
+
+        .preview-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 20px;
+            padding: 20px;
+            background-color: #f0f0f0;
+        }
+
+        .main-preview, .cropped-preview {
+            width: 40%;
+            max-height: 300px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .cropped-preview {
+            width: 150px;
+            height: 150px;
+            overflow: hidden;
+        }
+
+        #imagePreview, #croppedPreview {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+
+        .controls-container {
+            display: flex;
+            gap: 15px;
+            padding: 0 20px 20px;
+        }
+
+        .controls-container > * {
+            flex: 1;
+        }
+
+        button {
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        select {
+            padding: 10px;
+        }
+
+        input[type="file"] {
+            display: none;
+        }
+
+        .file-upload-label {
+            display: inline-block;
+            padding: 10px;
+            background-color: #2196F3;
+            color: white;
+            cursor: pointer;
+            text-align: center;
+        }
+
+        #collageContainer {
+            margin-top: 20px;
+            text-align: center;
+            position: relative;
+        }
+
+        #collageImage {
+            max-width: 100%;
+            max-height: 600px;
+            object-fit: contain;
+            border: 1px solid #ddd;
+        }
+
+        #downloadLink {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #FF9800;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="preview-container">
+            <div class="main-preview">
+                <img id="imagePreview" src="" alt="Original Image">
+            </div>
+            <div class="cropped-preview">
+                <img id="croppedPreview" src="" alt="Cropped Image">
+            </div>
+        </div>
+
+        <div class="controls-container">
+            <label for="imageUpload" class="file-upload-label">
+                Select Image
+                <input type="file" id="imageUpload" accept="image/*">
+            </label>
+
+            <select id="photoSizeSelect">
+                <option value="indian">Indian Passport Size (2in x 2in)</option>
+                <option value="german">German Passbild (4.5cm x 3.5cm)</option>
+            </select>
+
+            <button id="cropButton" disabled>Crop Image</button>
+
+            <select id="collageSizeSelect">
+                <option value="15x10">15 cm x 10 cm</option>
+            </select>
+            <button id="generateCollageButton" disabled>Generate Collage</button>
+        </div>
+
+        <div id="collageContainer">
+            <img id="collageImage" src="" alt="Generated Collage">
+            <a id="downloadLink" href="#" style="display:none;">Download Collage</a>
+        </div>
+    </div>
+
+    <script>
+        // Wait for the DOM to be fully loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            // DOM element references
+            const imageUpload = document.getElementById('imageUpload');
+            const imagePreview = document.getElementById('imagePreview');
+            const croppedPreview = document.getElementById('croppedPreview');
+            const cropButton = document.getElementById('cropButton');
+            const generateCollageButton = document.getElementById('generateCollageButton');
+            const photoSizeSelect = document.getElementById('photoSizeSelect');
+            const collageSizeSelect = document.getElementById('collageSizeSelect');
+            const collageImage = document.getElementById('collageImage');
+            const downloadLink = document.getElementById('downloadLink');
+
+            let cropper = null;
+
+            // Passport size configurations (EXPLICIT 300 PPI)
+            const passportSizes = {
+                indian: {
+                    aspectRatio: 1, // 2in x 2in (square)
+                    thumbnailSize: 600, // pixels at 300 DPI
+                    width: 2 * 300, // 2 inches at 300 DPI
+                    height: 2 * 300 // 2 inches at 300 DPI
+                },
+                german: {
+                    aspectRatio: 3.5 / 4.5, // Corrected aspect ratio (Width / Height)
+                    thumbnailSize: 530, // pixels at 300 DPI
+                    width: 3.5 * 300, // 3.5 cm at 300 DPI
+                    height: 4.5 * 300 // 4.5 cm at 300 DPI
+                }
+            };
+
+            const collageSizes = {
+                '15x10': {
+                    width: Math.round(15 * 300), // 15 cm at 300 PPI (4500 pixels)
+                    height: Math.round(10 * 300) // 10 cm at 300 PPI (3000 pixels)
+                }
+            };
+
+            imageUpload.addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                const reader = new FileReader();
+
+                reader.onload = function(event) {
+                    imagePreview.src = event.target.result;
+                    croppedPreview.src = ''; // Clear previous cropped image
+                    collageImage.src = ''; // Clear previous collage
+                    downloadLink.style.display = 'none'; // Hide download link
+                    
+                    // Destroy existing cropper if exists
+                    if (cropper) {
+                        cropper.destroy();
+                    }
+
+                    // Get current selected size configuration
+                    const selectedSize = photoSizeSelect.value;
+                    const sizeConfig = passportSizes[selectedSize];
+
+                    // Initialize Cropper with dynamic aspect ratio
+                    cropper = new Cropper(imagePreview, {
+                        aspectRatio: sizeConfig.aspectRatio,
+                        viewMode: 1,
+                    });
+
+                    // Enable buttons
+                    cropButton.disabled = false;
+                    generateCollageButton.disabled = false;
+                };
+
+                reader.readAsDataURL(file);
+            });
+
+            // Update aspect ratio when dropdown changes
+            photoSizeSelect.addEventListener('change', function() {
+                if (cropper) {
+                    // Get current selected size configuration
+                    const selectedSize = photoSizeSelect.value;
+                    const sizeConfig = passportSizes[selectedSize];
+
+                    // Destroy and reinitialize cropper with new aspect ratio
+                    cropper.destroy();
+
+                    cropper = new Cropper(imagePreview, {
+                        aspectRatio: sizeConfig.aspectRatio,
+                        viewMode: 1,
+                    });
+
+                    // Clear cropped preview and collage
+                    croppedPreview.src = '';
+                    collageImage.src = '';
+                    downloadLink.style.display = 'none';
+                }
+            });
+
+            cropButton.addEventListener('click', function() {
+                if (cropper) {
+                    const croppedCanvas = cropper.getCroppedCanvas();
+                    
+                    // Set cropped image to preview
+                    croppedPreview.src = croppedCanvas.toDataURL('image/jpeg');
+                }
+            });
+
+            generateCollageButton.addEventListener('click', function() {
+                const selectedPhotoSize = photoSizeSelect.value;
+                const selectedCollageSize = collageSizeSelect.value;
+                const croppedCanvas = cropper.getCroppedCanvas();
+                const photoSizeConfig = passportSizes[selectedPhotoSize];
+                const collageSizeConfig = collageSizes[selectedCollageSize];
+                
+                // Create canvas for collage with precise 15cm x 10cm at 300 PPI
+                const collageCanvas = document.createElement('canvas');
+                const ctx = collageCanvas.getContext('2d');
+                
+                // Explicit canvas size: 15cm x 10cm at 300 PPI
+                collageCanvas.width = collageSizeConfig.width; // 15 cm * 300 PPI
+                collageCanvas.height = collageSizeConfig.height; // 10 cm * 300 PPI
+                
+                // White background
+                ctx.fillStyle = 'white';
+                ctx.fillRect(0, 0, collageCanvas.width, collageCanvas.height);
+
+                // Border size
+                const borderSize = Math.round(50 * (300/300)); // Scale border proportionally
+
+                // Calculate grid layout
+                const cols = Math.floor((collageCanvas.width - (borderSize * 2)) / (photoSizeConfig.width + borderSize));
+                const rows = Math.floor((collageCanvas.height - (borderSize * 2)) / (photoSizeConfig.height + borderSize));
+
+                // Calculate total grid dimensions with borders
+                const gridWidth = (photoSizeConfig.width * cols) + (borderSize * (cols + 1));
+                const gridHeight = (photoSizeConfig.height * rows) + (borderSize * (rows + 1));
+
+                // Calculate starting position to center the grid
+                const startX = Math.floor((collageCanvas.width - gridWidth) / 2);
+                const startY = Math.floor((collageCanvas.height - gridHeight) / 2);
+
+                // Draw grid with borders
+                ctx.strokeStyle = 'black';
+                ctx.lineWidth = 2; // Thin border line
+
+                for (let row = 0; row < rows; row++) {
+                    for (let col = 0; col < cols; col++) {
+                        const x = startX + (col * (photoSizeConfig.width + borderSize)) + borderSize;
+                        const y = startY + (row * (photoSizeConfig.height + borderSize)) + borderSize;
+
+                        // Calculate source dimensions to maintain aspect ratio
+                        const sourceWidth = croppedCanvas.width;
+                        const sourceHeight = croppedCanvas.height;
+                        const sourceAspectRatio = sourceWidth / sourceHeight;
+                        const targetAspectRatio = photoSizeConfig.width / photoSizeConfig.height;
+
+                        let drawWidth, drawHeight, sourceX, sourceY, sourceDrawWidth, sourceDrawHeight;
+
+                        // Determine how to scale the image to fit the target box
+                        if (sourceAspectRatio > targetAspectRatio) {
+                            // Image is wider than the target box
+                            drawHeight = photoSizeConfig.height;
+                            drawWidth = drawHeight * sourceAspectRatio;
+                            sourceY = 0;
+                            sourceX = (sourceWidth - (sourceHeight * targetAspectRatio)) / 2;
+                            sourceDrawWidth = sourceHeight * targetAspectRatio;
+                            sourceDrawHeight = sourceHeight;
+                        } else {
+                            // Image is taller than the target box
+                            drawWidth = photoSizeConfig.width;
+                            drawHeight = drawWidth / sourceAspectRatio;
+                            sourceX = 0;
+                            sourceY = (sourceHeight - (sourceWidth / targetAspectRatio)) / 2;
+                            sourceDrawWidth = sourceWidth;
+                            sourceDrawHeight = sourceWidth / targetAspectRatio;
+                        }
+
+                        // Draw image preserving aspect ratio
+                        ctx.drawImage(
+                            croppedCanvas,
+                            sourceX, sourceY, 
+                            sourceDrawWidth, sourceDrawHeight,
+                            x, y, 
+                            photoSizeConfig.width, 
+                            photoSizeConfig.height
+                        );
+
+                        // Draw thin black border
+                        ctx.strokeRect(x, y, photoSizeConfig.width, photoSizeConfig.height);
+                    }
+                }
+
+                // Display collage in the page
+                const collageDataUrl = collageCanvas.toDataURL('image/png');
+                collageImage.src = collageDataUrl;
+
+                // Set up download link
+                downloadLink.href = collageDataUrl;
+                downloadLink.download = 'passport_photo_collage.png';
+                downloadLink.style.display = 'inline-block';
+            });
+        });
+    </script>
+</body>
+</html>
